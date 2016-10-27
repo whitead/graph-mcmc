@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = function (grunt) {
     
     //load required grunt plugins
@@ -6,15 +7,30 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-
-        pkg: grunt.file.readJSON('package.json'),
-       
 	
+        pkg: grunt.file.readJSON('package.json'),
+       	
 	browserify: {
-	    'build/app.js': ['client/scripts/**/*.js']
-
+	    options: {
+		transform: [
+		    ['babelify', {
+			loose: 'all'
+		    }]
+		],
+		browserifyOptions: {
+		    debug: true
+		}
+	    },
+	    files:{		
+		'build/app.js': ['client/scripts/**/*.js']
+	    }
 	},
 
+	uglify: {
+	    files: {
+		'build/min.js': ['build/app.js']
+	    }
+	},
 	
 	jshint: {
 	    all: [
@@ -29,8 +45,8 @@ module.exports = function (grunt) {
         mochaTest: {
             test: {
                 options: {
-            reporter: 'spec'
-                },
+		    reporter: 'spec'
+		},
                 src: ['client/test/**/*.js']
             }
         },
@@ -41,16 +57,18 @@ module.exports = function (grunt) {
 		tasks: ['html']		
 		
 	    },
-	    js: [
+	    js: {
 		files: ['client/scripts/**/*.js'],
 		tasks: ['js']
-
+		
 	    }	    
 	}
-
 	
-	grunt.registerTask('js', ['jshint', 'test', 'browserify']);
-	grunt.registerTask('default', ['js', 'watch']);
     });
+    
 
+    grunt.registerTask('js', ['jshint', 'mochaTest', 'browserify']);
+    grunt.registerTask('default', ['js', 'watch']);
+    grunt.registerTask('production', ['js', 'uglify']);
+        
 };
