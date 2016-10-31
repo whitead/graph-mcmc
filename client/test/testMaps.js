@@ -16,7 +16,9 @@ describe('maps', function() {
 	let m = new maps.Map();
 	m.add([0,1], 'f');
 	m.add([0,0],'fdsa');
+	m.add([3,5],'4343432');
 	expect(m.dist(0,1)).to.be.within(0.99, 1.01);
+	expect(m.dist(0,2)).to.be.within(4.99, 5.01);
 	done();
     });
     
