@@ -120,7 +120,7 @@ describe('graphs', function() {
 
 	expect(next).to.be.ok;
 
-	expect(next).to.have.property('graph');
+	expect(next).to.have.property('x');
 	expect(next).to.have.property('action');
 	expect(next).to.have.property('edge');
 
@@ -142,7 +142,7 @@ describe('graphs', function() {
 	expect(next).to.be.ok;
 
 	expect(next.action).to.eql('forced_add');
-	expect(next.graph.edgeCount()).to.eql(g.edgeCount() + 1);
+	expect(next.x.edgeCount()).to.eql(g.edgeCount() + 1);
 	done();
     });
 
@@ -158,7 +158,7 @@ describe('graphs', function() {
 
 	expect(next).to.be.ok;
 	expect(next.action).to.eql('forced_delete');
-	expect(next.graph.edgeCount()).to.eql(g.edgeCount() - 1);
+	expect(next.x.edgeCount()).to.eql(g.edgeCount() - 1);
 	done();
     });
 
@@ -172,7 +172,7 @@ describe('graphs', function() {
 	let next =  graphs.nextGraph(g, 0.0);
 	expect(next).to.be.ok;
 	expect(next.action).to.eql('delete');
-	expect(next.graph.edgeCount()).to.eql(g.edgeCount() - 1);
+	expect(next.x.edgeCount()).to.eql(g.edgeCount() - 1);
 	done();
 
     });
@@ -187,7 +187,7 @@ describe('graphs', function() {
 	let next =  graphs.nextGraph(g, 1.0);
 	expect(next).to.be.ok;
 	expect(next.action).to.eql('add');
-	expect(next.graph.edgeCount()).to.eql(g.edgeCount() + 1);
+	expect(next.x.edgeCount()).to.eql(g.edgeCount() + 1);
 	done();
 
     });

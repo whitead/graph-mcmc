@@ -1,6 +1,9 @@
 'use strict';
 var glib = require("graphlib");
 
+/*
+* Converts a list of edges and Map into a graphlib graph.
+*/
 exports.set2graph = function(edge_set, map) {
     let g = new glib.Graph({directed: false});
     map.points.forEach( (p, i) => {
@@ -13,14 +16,17 @@ exports.set2graph = function(edge_set, map) {
     return g;
 }
 
-function candidate_edge(g, disallowed=[], guess_existing=false) {
+/*
+* Private function. Identifies edges for removal/addition
+*/
+function _candidate_edge(g, disallowed=[], guess_existing=false) {
     
-    let i, j;
+    let i, j; //new edge nodes
     let timeout = 10;
     
     while(timeout > 0) {
 	
-	//try edge
+	//guess edge
 	if(!guess_existing) {	    
 	    i = Math.floor(g.nodeCount() * Math.random());
 	    j = Math.floor(g.nodeCount() * Math.random());
@@ -47,14 +53,21 @@ function candidate_edge(g, disallowed=[], guess_existing=false) {
     }
 
     if(timeout === 0)
-	return null;
+	return null; //give-up
 
     return [i,j];
 }
 
+/*
+* Proposes new connected graph from existing connected graph.
+* 
+*
+* Args:
+*     padd: Probability of adding an edge. Deleting is 1 - padd.
+*/
 exports.nextGraph = function(g, padd=0.5) {
 
-    //make new one
+    //copy graph to new one
     let g2 = new glib.Graph({directed: false});
     g.nodes().forEach( (n) => {
 	g2.setNode(n, g.node(n));
@@ -88,7 +101,7 @@ exports.nextGraph = function(g, padd=0.5) {
 	g.edges().forEach( (e) => {
 	    disallowed.push([e.v, e.w]);
 	});
-	e = candidate_edge(g, disallowed);	
+	e = _candidate_edge(g, disallowed);	
 	if(e !== null) {
 	    qij *= padd * 1 / (  g.nodeCount() * (g.nodeCount() - 1) / 2 - g.edgeCount());
 	    g2.setEdge(e[0], e[1]);
@@ -98,7 +111,7 @@ exports.nextGraph = function(g, padd=0.5) {
 	//delete
 	action += 'delete'
 	let disallowed = gbridges;	
-	e = candidate_edge(g, disallowed, true);
+	e = _candidate_edge(g, disallowed, true);
 	if(e !== null) {
 	    qij *= pdel * 1 / (g.edgeCount() - disallowed.length);
 	    g2.removeEdge(e[0], e[1]);
@@ -110,31 +123,46 @@ exports.nextGraph = function(g, padd=0.5) {
 	return null;
     }
 
-    return {graph: g2, edge: e, action: action, qij: qij, qji: qji};
+    return {x: g2, edge: e, action: action, qij: qij, qji: qji};
 }
 
+/*
+* Identifies all bridges in a graph. Graph must be connected
+*
+* Reference: http://stackoverflow.com/questions/11218746/bridges-in-a-connected-graph/11221469#11221469
+*/
 function bridges(g) {
-    //http://stackoverflow.com/questions/11218746/bridges-in-a-connected-graph/11221469#11221469
 
     var data = {low: Array(), pre: Array(), cnt: 0, bridges: Array()};
     g.nodes().forEach( () => {
 	data.low.push(-1);
 	data.pre.push(-1);
     });   
-    bridge_dfs(g, 0, 0, data) //only have to call from first node, since we only consider connected
+    _bridge_dfs(g, 0, 0, data) //only have to call from first node, since we only consider connected
     return data.bridges;
 }
 
-function bridge_dfs(g, u, v, data) {
+function _bridge_dfs(g, u, v, data) {
+
+    //depth first search
+    //pre is when encountered in dfs
+    //low is min of pre and children's pre value. Indicator for cycle
     data.pre[v] = data.cnt;
     data.low[v] = data.cnt++;
+
+    //for each edge in v
     g.nodeEdges(v).forEach(function(e) {
 	let w = Number(e.w);
 	if(w === v)
-	    w = Number(e.v);	
+	    w = Number(e.v);
+	//if we haven't seen the end of this edge
 	if(data.pre[w] === -1) {
-	    bridge_dfs(g, v, w, data);
+	    //recurse 
+	    _bridge_dfs(g, v, w, data);
+	    //see if a child of me is lower than me in dfs order
 	    data.low[v] = Math.min(data.low[v], data.low[w]);
+	    //if w is not part of a cycle (articulated node), because it never saw a child with lower pre
+	    //then the v - w edge is a bridge
 	    if(data.low[w] === data.pre[w]) {
 		data.bridges.push([v, w]);		
 	    }

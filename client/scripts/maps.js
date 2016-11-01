@@ -28,16 +28,26 @@ exports.Map = class Map {
 	return Math.sqrt(dist);
     }
 
-    edist(e) {
+    /*
+    * returns weight of edge
+    */
+    edist(e) {	
 	return this.dist(e.v, e.w);
     }
 
+    /*
+    * Returns sum of weights of all edges in graph
+    */
     dist_sum(g) {
 	return g.edges().reduce( (sum, e) => {
 	    return sum + this.edist(e);
 	}, 0);
     }
 
+    /*
+    * Computes the graph measure of g on the map. r is the relative weighting of 
+    * the sume of edges and sum of shortest paths to node 0.
+    */
     measure(g, r=1) {
 	let paths = glib.alg.dijkstra(g, 0, (e) => {return this.edist(e)});
 	let p = Object.keys(paths).reduce( (sum, k) => {	    
