@@ -6,6 +6,7 @@
   "description": "MCMC graph",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-things": "^0.2.0",
     "graphlib": "^2.1.1",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-copy": "^1.0.0",
