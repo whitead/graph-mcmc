@@ -94,7 +94,6 @@ describe('graphs', function() {
 	
 	let g = graphs.set2graph(edges, m);
 	let b = graphs.bridges(g);
-	console.log(b);
 	
 	expect(b.length).to.equal(2);
 	expect(b).to.deep.include.something.that.deep.equals([2,3]);
@@ -102,7 +101,95 @@ describe('graphs', function() {
 	done();
     });
 
-    it('should propose new graph with prob', function(done) {
-	
+    it('should handle empty edge sets', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	let g = graphs.set2graph([], m);
+	expect(g).to.be.ok;
+	done();
     });
+
+    it('should propose new graphs', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	let g = graphs.set2graph([[0,1], [1,2], [2,3]], m);
+	let next =  graphs.nextGraph(g);
+
+	expect(next).to.be.ok;
+
+	expect(next).to.have.property('graph');
+	expect(next).to.have.property('action');
+	expect(next).to.have.property('edge');
+
+	expect(next.qji).to.be.below(1);
+	expect(next.qij).to.be.below(1);
+	done();
+    });
+
+    it('should propose correct graph when only option is to add', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	let g = graphs.set2graph([[0,1], [1,2], [2,3]], m);
+	let next =  graphs.nextGraph(g);
+
+
+	expect(next).to.be.ok;
+
+	expect(next.action).to.eql('forced_add');
+	expect(next.graph.edgeCount()).to.eql(g.edgeCount() + 1);
+	done();
+    });
+
+    
+    it('should propose correct graph when only option is to delete', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	let g = graphs.set2graph([[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]], m);
+	let next =  graphs.nextGraph(g);
+
+	expect(next).to.be.ok;
+	expect(next.action).to.eql('forced_delete');
+	expect(next.graph.edgeCount()).to.eql(g.edgeCount() - 1);
+	done();
+    });
+
+    it('should propose sometimes propose graphs with less edges', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	let g = graphs.set2graph([[0,1], [1,2], [2,3], [3,0]], m);
+	let next =  graphs.nextGraph(g, 0.0);
+	expect(next).to.be.ok;
+	expect(next.action).to.eql('delete');
+	expect(next.graph.edgeCount()).to.eql(g.edgeCount() - 1);
+	done();
+
+    });
+
+    it('should propose sometimes propose graphs with more edges', function(done) {
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	m.add([0,0]);
+	let g = graphs.set2graph([[0,1], [1,2], [2,3], [3,0]], m);
+	let next =  graphs.nextGraph(g, 1.0);
+	expect(next).to.be.ok;
+	expect(next.action).to.eql('add');
+	expect(next.graph.edgeCount()).to.eql(g.edgeCount() + 1);
+	done();
+
+    });
+
 });
