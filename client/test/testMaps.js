@@ -1,6 +1,6 @@
 'use strict';
 var expect = require('chai').expect; //assertion library
-var maps = require('../scripts/maps.js');
+var maps = require('../lib/maps.js');
 
 describe('maps', function() {
 

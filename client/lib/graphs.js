@@ -17,12 +17,26 @@ exports.set2graph = function(edge_set, map) {
 }
 
 /*
+* Creates a simple spanning graph
+*/
+exports.map2graph = function(map) {
+    
+    let g = new glib.Graph({directed: false});
+    map.points.forEach( (p, i) => {
+	g.setNode(i, p.name);
+	g.setEdge(i, (i+1) % map.points.length);
+    });
+    
+    return g;
+}
+
+/*
 * Private function. Identifies edges for removal/addition
 */
 function _candidate_edge(g, disallowed=[], guess_existing=false) {
     
     let i, j; //new edge nodes
-    let timeout = 10;
+    let timeout = 250;
     
     while(timeout > 0) {
 	
@@ -52,8 +66,14 @@ function _candidate_edge(g, disallowed=[], guess_existing=false) {
 	timeout--;
     }
 
-    if(timeout === 0)
+    if(timeout === 0) {
+	if(guess_existing) {
+	    console.log('Unable to find valid candidate edge to cut. Maybe invalid graph?');
+	} else {
+	    console.log('Unable to find valid candidate edge to add. Maybe invalid graph?');
+	}
 	return null; //give-up
+    }
 
     return [i,j];
 }
@@ -83,12 +103,13 @@ exports.nextGraph = function(g, padd=0.5) {
     let e = null;
 
     //check for special cases
-    let gbridges = bridges(g);
-    if(gbridges.length === g.edgeCount()) {
+    if(!('bridges' in g))
+    g.bridges = bridges(g);
+    if(g.bridges.length === g.edgeCount()) {
 	//forced add
 	action = 'forced_';
 	padd = 1;
-    } else if(g.edgeCount() === g.nodeCount() * (g.nodeCount() - 1) / 2) {
+    } else if(g.edgeCount() === (g.nodeCount() * (g.nodeCount() - 1) / 2)) {
 	//forced delete
 	pdel = 1;
 	action = 'forced_';
@@ -105,12 +126,13 @@ exports.nextGraph = function(g, padd=0.5) {
 	if(e !== null) {
 	    qij *= padd * 1 / (  g.nodeCount() * (g.nodeCount() - 1) / 2 - g.edgeCount());
 	    g2.setEdge(e[0], e[1]);
+	    g2.bridges = bridges(g2);
 	    qji *= pdel * 1 / (g2.edgeCount() - bridges(g2).length);
 	}
     } else {
 	//delete
 	action += 'delete'
-	let disallowed = gbridges;	
+	let disallowed = g.bridges;	
 	e = _candidate_edge(g, disallowed, true);
 	if(e !== null) {
 	    qij *= pdel * 1 / (g.edgeCount() - disallowed.length);
@@ -120,6 +142,7 @@ exports.nextGraph = function(g, padd=0.5) {
     }
 
     if(e === null) {
+	console.log('Failed to propose new graph with action ' + action);
 	return null;
     }
 

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      .controls {
+      margin: 50px;
+      }
+
+
+      canvas {
+      margin: 25px;
+      border: 2px solid gray;
+      }
+
+      table.fixed { table-layout:fixed; width:450px;}
+      table.fixed td { overflow: hidden; }
+      
+    </style>
+  </head>
+  <body>
+    
+    <div>
+      <canvas id="map-canvas" width="450" height="600"></canvas>
+      
+      <canvas id="prop-canvas" width="450" height="600"></canvas>
+    </div>
+    <div class="controls">
+      <button id="start" disabled> Start </button>
+      <input type="radio" id="slow" name="speed" checked> Slow </input>
+      <input type="radio" name="speed"> Fast </input>      
+
+      <br />
+      <table class="fixed">
+	<tr>
+	  <td>
+	    Temperature: <span id="temperature"> 300 </span>
+	  </td>
+	  <td>
+	    <input id="trange" type="range" min="0" max="500" value="300"/>
+	  </td>
+	</tr>
+      <br/>
+      
+      <table class="fixed">
+	<tr>
+	  <td> Step: <span id="step"> 0 </span> </td>
+	  <td> qij: <span id="qij"> 0 </span> </td>
+	  <td> qji: <span id="qji"> 0 </span> </td>
+	  <td> mh: <span id="mh"> 0 </span> </td>
+	</tr>
+	<tr>
+	  <td> <span id="move"> Move</span></td>
+	  <td> <span id="accept"> Reject</span></td>
+	</tr>
+	<tr>
+	  <td> Measure: </td> <td> <span id="theta"> 0 </span> </td>
+	</tr>
+      </table>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
+      

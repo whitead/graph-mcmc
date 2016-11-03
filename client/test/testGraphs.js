@@ -2,8 +2,8 @@
 var chai = require('chai');
 chai.use(require('chai-things'));
 var expect = chai.expect; //assertion library
-var graphs = require('../scripts/graphs.js');
-var maps = require('../scripts/maps.js');
+var graphs = require('../lib/graphs.js');
+var maps = require('../lib/maps.js');
 
 describe('graphs', function() {
 

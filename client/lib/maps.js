@@ -1,5 +1,5 @@
 'use strict';
-var glib = require("graphlib");
+var glib = require('graphlib');
 
 exports.Map = class Map {
 /*
@@ -13,7 +13,7 @@ exports.Map = class Map {
     add(p, name='') {
 	this.points.push(p);
 	this.names.push(name);
-    }
+    }    
 
     point(i) {
 	return {p: this.points[i], name: this.names[i]};
@@ -49,7 +49,7 @@ exports.Map = class Map {
     * the sume of edges and sum of shortest paths to node 0.
     */
     measure(g, r=1) {
-	let paths = glib.alg.dijkstra(g, 0, (e) => {return this.edist(e)});
+	let paths = glib.alg.dijkstra(g, 0, (e) => {return this.edist(e)}, (v) => g.nodeEdges(v));
 	let p = Object.keys(paths).reduce( (sum, k) => {	    
 	    return sum + paths[k].distance;
 	}, 0);
