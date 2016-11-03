@@ -17,6 +17,7 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-test": "^0.13.2",
+    "grunt-shell": "^2.0.0",
     "matchdep": "^1.0.1",
     "mocha-test": "^1.0.3"
   }
