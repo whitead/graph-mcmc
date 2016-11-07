@@ -50,7 +50,33 @@ module.exports = function (grunt) {
                 src: ['client/test/**/*.js']
             }
         },
+
+	mocha_istanbul: {
+            coveralls: {
+                src: ['client/test'], // multiple folders also works
+                options: {
+                    coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered
+                    check: {
+                        lines: 75,
+                        statements: 75
+                    },
+                    root: 'client/lib'
+                }
+            }
+        },
 	
+        istanbul_check_coverage: {
+            default: {
+		options: {
+		    coverageFolder: 'coverage*', // will check both coverage folders and merge the coverage results
+		    check: {
+			lines: 80,
+			statements: 80
+		    }
+		}
+            }
+        },
+		
 	watch: {
 	    html:{
 		files: ['client/**/*.html'],
@@ -95,7 +121,14 @@ module.exports = function (grunt) {
     });
     
 
-    grunt.registerTask('js', ['jshint', 'mochaTest', 'browserify']);
+    grunt.event.on('coverage', function(lcovFileContents, done){
+        // Check below on the section "The coverage event"
+        done();
+    });
+    
+    grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
+    
+    grunt.registerTask('js', ['jshint', 'mochaTest', 'coveralls', 'browserify']);
     grunt.registerTask('html', ['copy:html']);
     grunt.registerTask('default', ['js', 'html', 'connect', 'watch']);
     grunt.registerTask('production', ['js', 'uglify', 'html', 'shell']);
