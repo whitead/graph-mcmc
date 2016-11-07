@@ -148,6 +148,7 @@ module.exports = function (grunt) {
     
     grunt.registerTask('js', ['jshint', 'mochaTest', 'coverage', 'browserify']);
     grunt.registerTask('html', ['copy:html']);
+    grunt.registerTask('test', ['js']);
     grunt.registerTask('default', ['js', 'html', 'connect', 'watch']);
     grunt.registerTask('production', ['js', 'uglify', 'html', 'shell']);
         
