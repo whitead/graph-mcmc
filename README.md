@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/whitead/graph-mcmc.svg?branch=master)](https://travis-ci.org/whitead/graph-mcmc)
+
+[![Coverage Status](https://coveralls.io/repos/github/whitead/graph-mcmc/badge.svg?branch=master)](https://coveralls.io/github/whitead/graph-mcmc?branch=master)
+
+
 Graph MCMC
 ====
 
@@ -16,7 +21,7 @@ leading to node 0.
 Demo
 ====
 
-See demo at [whitelab.org/Apps/GraphMC](https://thewhitelab.org/Apps/GraphMC).
+See demo at [whitelab.org/Apps/GraphMC](http://thewhitelab.org/Apps/GraphMC).
 
 Develop
 ====
