@@ -22,6 +22,21 @@ Demo
 
 See demo at [whitelab.org/Apps/GraphMC](http://thewhitelab.org/Apps/GraphMC).
 
+Set-up
+---
+
+Point and click on the left panel to layout a set of points that will
+be the nodes in the graph. The first point created will be the central
+node (colored red). The distance between nodes will be the weight of
+edges. Click Start when finished.
+
+Running
+---
+
+The left panel is the current graph and the right is the
+proposed. Bridges are indicated in blue and other edges are light
+gray.
+
 Develop
 ====
 
