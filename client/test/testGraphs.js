@@ -192,4 +192,15 @@ describe('graphs', function() {
 
     });
 
+    it('should be able to turn a map into a starting graph', function(done) {
+	
+	
+	let m = new maps.Map();
+	m.add([0,0]);
+	m.add([1,1]);
+	let g = graphs.map2graph(m);
+	expect(g.edgeCount()).to.eql(1);
+	done();
+    });
+    
 });
