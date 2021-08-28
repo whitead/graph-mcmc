@@ -20,7 +20,7 @@ leading to node 0.
 Demo
 ====
 
-See demo at [whitelab.org/Apps/GraphMC](http://thewhitelab.org/Apps/GraphMC).
+See demo at [https://whitead.github.io/graph-mcmc/](https://whitead.github.io/graph-mcmc/).
 
 Set-up
 ---
