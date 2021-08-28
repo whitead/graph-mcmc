@@ -28,5 +28,6 @@
     "istanbul": "^0.4.5",
     "matchdep": "^1.0.1",
     "mocha-test": "^1.0.3"
-  }
+  },
+  "dependencies": {}
 }
