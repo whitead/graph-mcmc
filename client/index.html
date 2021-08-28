@@ -2,10 +2,15 @@
 <html>
 
 <head>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet">
+
   <style>
     body {
-      margin: 0px;
-      padding: 0px;
+      font-family: 'Source Code Pro', monospace;
+      margin: 1rem;
     }
 
     .controls {
@@ -26,15 +31,26 @@
     table.fixed td {
       overflow: hidden;
     }
+
+    .canvas-col {
+      margin-left: 1rem;
+      columns: 450px 2;
+    }
   </style>
 </head>
 
 <body>
-
-  <div>
-    <canvas id="map-canvas" width="450" height="600"></canvas>
-
-    <canvas id="prop-canvas" width="450" height="600"></canvas>
+  <h1>Graph Markov Chain Monte Carlo</h1>
+  <p>All nodes must be connected to root (red) and the objective is to minimize total edge distances</p>
+  <div class="canvas-col">
+    <div>
+      <h2>Current</h2>
+      <canvas id="map-canvas" width="450" height="600"></canvas>
+    </div>
+    <div>
+      <h2>Proposed</h2>
+      <canvas id="prop-canvas" width="450" height="600"></canvas>
+    </div>
   </div>
   <div class="controls">
     <button id="start" disabled> Start </button>
