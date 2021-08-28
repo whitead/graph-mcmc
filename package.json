@@ -5,6 +5,7 @@
   "license": "MIT",
   "description": "MCMC graph",
   "scripts": {
+    "build": "grunt production",
     "test": "grunt test"
   },
   "devDependencies": {
